@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Iderma_Launcher.SessionLockPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Border
+            Width="420"
+            Margin="24"
+            Padding="28"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Style="{StaticResource FluentCardStyle}">
+            <StackPanel Spacing="12">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    FontSize="28"
+                    Glyph="&#xE72E;" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="Sesión bloqueada" />
+                <TextBlock
+                    x:Name="LockUserText"
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    TextAlignment="Center"
+                    TextWrapping="WrapWholeWords" />
+                <PasswordBox
+                    x:Name="PasswordBox"
+                    Header="Contraseña"
+                    KeyDown="PasswordBox_KeyDown"
+                    PlaceholderText="••••••••" />
+                <InfoBar
+                    x:Name="ErrorBar"
+                    IsClosable="False"
+                    IsOpen="False"
+                    Severity="Error"
+                    Title="No se pudo continuar" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Click="Unlock_Click"
+                    Content="Continuar"
+                    Style="{StaticResource AccentButtonStyle}" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Click="Logout_Click"
+                    Content="Cerrar sesión" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

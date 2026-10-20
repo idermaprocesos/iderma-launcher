@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Iderma.Launcher (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Iderma.Launcher (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

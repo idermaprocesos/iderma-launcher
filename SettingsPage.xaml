@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="Iderma_Launcher.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Iderma_Launcher"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+        <StackPanel
+            MaxWidth="860"
+            Padding="40,16,40,32"
+            HorizontalAlignment="Left"
+            Spacing="12">
+            <Grid>
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="16">
+                    <Button
+                        Padding="10,8"
+                        Click="Back_Click"
+                        ToolTipService.ToolTip="Volver al inicio">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon
+                                FontSize="16"
+                                Glyph="&#xE72B;" />
+                            <TextBlock VerticalAlignment="Center" Text="Volver" />
+                        </StackPanel>
+                    </Button>
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Configuración" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource BodyTextBlockStyle}"
+                            Text="Seguridad de tu sesión y comprobación del acceso a la base de datos." />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <InfoBar
+                x:Name="ResultBar"
+                IsClosable="True"
+                IsOpen="False" />
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <Grid ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        MaxWidth="168"
+                        HorizontalAlignment="Center"
+                        Spacing="8">
+                        <PersonPicture
+                            x:Name="AccountPicture"
+                            Width="112"
+                            Height="112"
+                            HorizontalAlignment="Center"
+                            IsTabStop="True"
+                            Tapped="Photo_Tapped"
+                            ToolTipService.ToolTip="Ampliar foto" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Pulsa la foto para ampliarla. Acércala con la rueda y arrástrala con el mouse para moverte."
+                            TextAlignment="Center"
+                            TextWrapping="WrapWholeWords" />
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            Click="ChangePhoto_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE114;" />
+                                <TextBlock VerticalAlignment="Center" Text="Cambiar foto" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            x:Name="ExpandPhotoButton"
+                            HorizontalAlignment="Stretch"
+                            Click="ExpandPhoto_Click"
+                            Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE740;" />
+                                <TextBlock VerticalAlignment="Center" Text="Ver en grande" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            x:Name="RemovePhotoButton"
+                            HorizontalAlignment="Stretch"
+                            Click="RemovePhoto_Click"
+                            Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                                <TextBlock VerticalAlignment="Center" Text="Quitar foto" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Spacing="8">
+                        <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Cuenta" />
+                        <TextBlock
+                            x:Name="AccountNameText"
+                            Style="{StaticResource BodyStrongTextBlockStyle}" />
+                        <TextBlock
+                            x:Name="AccountMetaText"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource BodyTextBlockStyle}" />
+                        <TextBlock
+                            x:Name="SessionStartText"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
+                        <TextBlock
+                            x:Name="SessionCodeText"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            TextWrapping="WrapWholeWords" />
+                        <TextBlock
+                            x:Name="PreviousAccessText"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Troubleshooting" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="Comprueba si este equipo puede entrar a la base de datos. Si falla, indica el error y qué hacer para corregirlo."
+                        TextWrapping="WrapWholeWords" />
+                    <Button
+                        x:Name="BotonComprobarBase"
+                        HorizontalAlignment="Left"
+                        Click="ComprobarBase_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="16" Glyph="&#xE9D9;" />
+                            <TextBlock VerticalAlignment="Center" Text="Comprobar acceso a la base de datos" />
+                        </StackPanel>
+                    </Button>
+                    <ProgressRing
+                        x:Name="AnilloBase"
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Left"
+                        IsActive="False"
+                        Visibility="Collapsed" />
+                    <InfoBar
+                        x:Name="BarraBase"
+                        IsClosable="False"
+                        IsOpen="False" />
+                    <TextBlock
+                        x:Name="TextoErrorBase"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        IsTextSelectionEnabled="True"
+                        TextWrapping="WrapWholeWords"
+                        Visibility="Collapsed" />
+                    <TextBlock
+                        x:Name="TextoSolucionBase"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        IsTextSelectionEnabled="True"
+                        TextWrapping="WrapWholeWords"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </Border>
+
+            <Border
+                x:Name="DevUpdatesCard"
+                Style="{StaticResource FluentCardStyle}"
+                Visibility="Collapsed">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Desarrollo" />
+                    <ToggleSwitch
+                        x:Name="UpdateCheckSwitch"
+                        Header="Buscar actualizaciones"
+                        OffContent="Desactivado"
+                        OnContent="Activado"
+                        Toggled="UpdateCheckSwitch_Toggled" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="Si lo desactivas, el launcher no consulta actualizaciones al iniciar sesión ni desde el botón Actualizaciones."
+                        TextWrapping="WrapWholeWords" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Flujo de trabajo" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="Pulsa la imagen para verla en grande. Acércala con la rueda y arrástrala con el mouse para moverte."
+                        TextWrapping="WrapWholeWords" />
+                    <Image
+                        MaxHeight="720"
+                        Source="Assets/workflow.png"
+                        Stretch="Uniform"
+                        Tapped="WorkflowImage_Tapped"
+                        ToolTipService.ToolTip="Ampliar imagen" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="12">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Protección de la sesión" />
+                    <TextBlock
+                        x:Name="ProtectionText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        TextWrapping="WrapWholeWords" />
+
+                    <ToggleSwitch
+                        x:Name="IdleSwitch"
+                        Header="Bloquear por inactividad"
+                        OffContent="Desactivado"
+                        OnContent="Activado"
+                        Toggled="IdleSwitch_Toggled" />
+                    <NumberBox
+                        x:Name="IdleMinutesBox"
+                        Header="Minutos sin actividad"
+                        IsEnabled="False"
+                        Maximum="240"
+                        Minimum="1"
+                        SmallChange="1"
+                        SpinButtonPlacementMode="Compact"
+                        Value="15"
+                        ValueChanged="ProtectionValue_Changed" />
+
+                    <ToggleSwitch
+                        x:Name="LockoutSwitch"
+                        Header="Bloquear tras intentos fallidos"
+                        OffContent="Desactivado"
+                        OnContent="Activado"
+                        Toggled="LockoutSwitch_Toggled" />
+                    <NumberBox
+                        x:Name="AttemptsBox"
+                        Header="Intentos antes del bloqueo"
+                        IsEnabled="False"
+                        Maximum="20"
+                        Minimum="3"
+                        SmallChange="1"
+                        SpinButtonPlacementMode="Compact"
+                        Value="5"
+                        ValueChanged="ProtectionValue_Changed" />
+                    <NumberBox
+                        x:Name="LockoutMinutesBox"
+                        Header="Minutos de bloqueo"
+                        IsEnabled="False"
+                        Maximum="120"
+                        Minimum="1"
+                        SmallChange="1"
+                        SpinButtonPlacementMode="Compact"
+                        Value="5"
+                        ValueChanged="ProtectionValue_Changed" />
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="Desactivar una protección pide la contraseña actual. El cambio queda en el registro local."
+                        TextWrapping="WrapWholeWords" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Registro de seguridad" />
+                    <TextBlock
+                        x:Name="ActivityScopeText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        TextWrapping="WrapWholeWords" />
+                    <TextBlock
+                        x:Name="ActivityEmptyText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="Todavía no hay actividad registrada."
+                        Visibility="Collapsed" />
+                    <ListView
+                        x:Name="ActivityList"
+                        IsItemClickEnabled="False"
+                        MaxHeight="320"
+                        SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:SecurityEventRow">
+                                <StackPanel Padding="0,6" Spacing="2">
+                                    <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind When}" />
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind Detail}"
+                                        TextWrapping="WrapWholeWords" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Registro de inicios de sesión" />
+                    <TextBlock
+                        x:Name="LoginScopeText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        TextWrapping="WrapWholeWords" />
+                    <Button
+                        x:Name="ExportLoginsButton"
+                        HorizontalAlignment="Left"
+                        Click="ExportLogins_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="16" Glyph="&#xE74E;" />
+                            <TextBlock VerticalAlignment="Center" Text="Exportar registro" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock
+                        x:Name="LoginEmptyText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="Todavía no hay inicios de sesión registrados."
+                        Visibility="Collapsed" />
+                    <ListView
+                        x:Name="LoginList"
+                        IsItemClickEnabled="False"
+                        MaxHeight="320"
+                        SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:LoginRecordRow">
+                                <StackPanel Padding="0,6" Spacing="2">
+                                    <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind When}" />
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind Detail}"
+                                        TextWrapping="WrapWholeWords" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
