@@ -30,7 +30,8 @@ public static class AppCatalog
             Name = "Logística",
             Description = "Inventario, insumos, compras y distribución de la clínica.",
             Status = AppStatus.Beta,
-            LogoFileName = "logistica.png"
+            LogoFileName = "logistica.png",
+            GitHubRepo = "idermaprocesos/iderma-logistica"
         },
         new()
         {
@@ -38,7 +39,8 @@ public static class AppCatalog
             Name = "Clínica",
             Description = "Pedidos del área de enfermería al almacén.",
             Status = AppStatus.Beta,
-            LogoFileName = "clinica.png"
+            LogoFileName = "clinica.png",
+            GitHubRepo = "idermaprocesos/iderma-clinica"
         },
         new()
         {
@@ -46,7 +48,8 @@ public static class AppCatalog
             Name = "Incidencias",
             Description = "Reportes de equipos averiados y falta de insumos o recursos.",
             Status = AppStatus.Beta,
-            LogoFileName = "incidencias.png"
+            LogoFileName = "incidencias.png",
+            GitHubRepo = "idermaprocesos/iderma-incidencias"
         },
         new()
         {
@@ -54,7 +57,8 @@ public static class AppCatalog
             Name = "Clientes",
             Description = "Clientes, ventas, cuidados y operaciones de la clínica.",
             Status = AppStatus.Alpha,
-            LogoFileName = "clientes.png"
+            LogoFileName = "clientes.png",
+            GitHubRepo = "idermaprocesos/iderma-clientes"
         },
         new()
         {
@@ -62,7 +66,8 @@ public static class AppCatalog
             Name = "Historial",
             Description = "Expediente clínico, evolución de tratamientos y registro de procedimientos.",
             Status = AppStatus.Alpha,
-            LogoFileName = "historial.png"
+            LogoFileName = "historial.png",
+            GitHubRepo = "idermaprocesos/iderma-historial"
         },
         new()
         {
@@ -70,7 +75,8 @@ public static class AppCatalog
             Name = "Mantenimiento",
             Description = "Equipos, calibraciones y mantenimientos de la clínica.",
             Status = AppStatus.Alpha,
-            LogoFileName = "mantenimiento.png"
+            LogoFileName = "mantenimiento.png",
+            GitHubRepo = "idermaprocesos/iderma-mantenimiento"
         },
         new()
         {
@@ -78,7 +84,8 @@ public static class AppCatalog
             Name = "Hardware",
             Description = "Registro de equipos informáticos de oficina.",
             Status = AppStatus.Beta,
-            LogoFileName = "hardware.png"
+            LogoFileName = "hardware.png",
+            GitHubRepo = "idermaprocesos/iderma-hardware"
         },
         new()
         {
@@ -86,7 +93,8 @@ public static class AppCatalog
             Name = "TI",
             Description = "Mesa de ayuda: tickets, equipos y seguimiento del área de TI.",
             Status = AppStatus.Alpha,
-            LogoFileName = "ti.png"
+            LogoFileName = "ti.png",
+            GitHubRepo = "idermaprocesos/iderma-ti"
         },
         new()
         {
@@ -94,7 +102,8 @@ public static class AppCatalog
             Name = "Administración",
             Description = "Contratos, postulaciones y organigrama de la clínica.",
             Status = AppStatus.Alpha,
-            LogoFileName = "administracion.png"
+            LogoFileName = "administracion.png",
+            GitHubRepo = "idermaprocesos/iderma-administracion"
         },
         new()
         {
@@ -102,7 +111,8 @@ public static class AppCatalog
             Name = "Gerencia",
             Description = "Personal, agenda, finanzas, inventario y seguimiento de la clínica.",
             Status = AppStatus.Alpha,
-            LogoFileName = "gerencia.png"
+            LogoFileName = "gerencia.png",
+            GitHubRepo = "idermaprocesos/iderma-gerencia"
         },
         new()
         {
@@ -110,7 +120,8 @@ public static class AppCatalog
             Name = "Contabilidad",
             Description = "Ingresos, egresos, comprobantes y cierre contable de la clínica.",
             Status = AppStatus.Alpha,
-            LogoFileName = "contabilidad.png"
+            LogoFileName = "contabilidad.png",
+            GitHubRepo = "idermaprocesos/iderma-contabilidad"
         },
         new()
         {
@@ -118,7 +129,8 @@ public static class AppCatalog
             Name = "Marketing",
             Description = "Bitácora de grabaciones.",
             Status = AppStatus.Alpha,
-            LogoFileName = "marketing.png"
+            LogoFileName = "marketing.png",
+            GitHubRepo = "idermaprocesos/iderma-marketing"
         },
         new()
         {
@@ -126,7 +138,8 @@ public static class AppCatalog
             Name = "Procesos",
             Description = "Flujos operativos, checklists y estandarización de protocolos Iderma.",
             Status = AppStatus.Alpha,
-            LogoFileName = "procesos.png"
+            LogoFileName = "procesos.png",
+            GitHubRepo = "idermaprocesos/iderma-procesos"
         },
         new()
         {
@@ -134,7 +147,8 @@ public static class AppCatalog
             Name = "Reclamos",
             Description = "Libro de reclamaciones: hojas, respuesta y plazo de los reclamos.",
             Status = AppStatus.Alpha,
-            LogoFileName = "reclamos.png"
+            LogoFileName = "reclamos.png",
+            GitHubRepo = "idermaprocesos/iderma-reclamos"
         },
         new()
         {
@@ -142,7 +156,8 @@ public static class AppCatalog
             Name = "Base de datos",
             Description = "Autoriza borrados y otras acciones sensibles de las aplicaciones de Iderma.",
             Status = AppStatus.Private,
-            LogoFileName = "basededatos.png"
+            LogoFileName = "basededatos.png",
+            GitHubRepo = "idermaprocesos/iderma-basededatos"
         },
         new()
         {
@@ -150,7 +165,8 @@ public static class AppCatalog
             Name = "Desarrollador",
             Description = "Herramientas internas de diagnóstico, registros y mantenimiento del ecosistema.",
             Status = AppStatus.Private,
-            LogoFileName = "desarrollador.png"
+            LogoFileName = "desarrollador.png",
+            GitHubRepo = "idermaprocesos/iderma-desarrollador"
         },
         new()
         {
@@ -158,7 +174,8 @@ public static class AppCatalog
             Name = "Cuentas",
             Description = "Usuarios internos, sedes, permisos y configuración general de Iderma.",
             Status = AppStatus.Private,
-            LogoFileName = "cuentas.png"
+            LogoFileName = "cuentas.png",
+            GitHubRepo = "idermaprocesos/iderma-cuentas"
         }
     ];
 
@@ -172,6 +189,45 @@ public static class AppCatalog
             ? new Uri(loose).AbsoluteUri
             : $"ms-appx:///Assets/Apps/{fileName}";
     }
+
+    /// <summary>
+    /// Logo de tarjeta: carpeta Logos (instalada) o LogosDisabled (falta instalar / hay que actualizar).
+    /// </summary>
+    public static string GetCardLogoUri(string appId, bool deshabilitado)
+    {
+        var archivo = NombreLogo(appId);
+        var carpeta = deshabilitado ? "LogosDisabled" : "Logos";
+        var ruta = Path.Combine(AppContext.BaseDirectory, "Assets", carpeta, archivo);
+        if (File.Exists(ruta))
+        {
+            return new Uri(ruta).AbsoluteUri;
+        }
+
+        var app = Find(appId);
+        return app is null ? string.Empty : GetLogoUri(app.LogoFileName);
+    }
+
+    public static string NombreLogo(string appId) => appId.ToLowerInvariant() switch
+    {
+        Logistica => "logo logistica.png",
+        Clinica => "logo clinica.png",
+        Incidencias => "logo incidencias.png",
+        Clientes => "logo clientes.png",
+        Historial => "logo historial.png",
+        Mantenimiento => "logo mantenimiento.png",
+        Hardware => "logo hardware.png",
+        Ti => "logo ti.png",
+        Administracion => "logo administracion.png",
+        Gerencia => "logo gerencia.png",
+        Contabilidad => "logo contabilidad.png",
+        Marketing => "logo marketing.png",
+        Procesos => "logo procesos.png",
+        Reclamos => "logo reclamos.png",
+        BaseDeDatos => "logo base de datos.png",
+        Desarrollador => "logo desarrollador.png",
+        Cuentas => "logo cuentas.png",
+        _ => "logo launcher.png"
+    };
 
     public static string StatusLabel(AppStatus status) => status switch
     {

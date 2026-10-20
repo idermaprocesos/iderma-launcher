@@ -8,8 +8,10 @@ public partial class App : Application
     private Window? _window;
     private static readonly Lazy<UserStore> UsersLazy = new(static () => new UserStore());
     private static readonly Lazy<SessionStore> SessionsLazy = new(static () => new SessionStore());
+    private static readonly Lazy<MeetingStore> MeetingsLazy = new(static () => new MeetingStore());
     public static UserStore Users => UsersLazy.Value;
     public static SessionStore Sessions => SessionsLazy.Value;
+    public static MeetingStore Meetings => MeetingsLazy.Value;
     private static readonly Lazy<SecurityCenter> SecurityLazy = new(static () => new SecurityCenter());
     private static readonly Lazy<LoginLog> LoginsLazy = new(static () => new LoginLog());
     public static SecurityCenter Security => SecurityLazy.Value;

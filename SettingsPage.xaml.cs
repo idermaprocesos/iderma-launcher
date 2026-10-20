@@ -389,6 +389,9 @@ public sealed partial class SettingsPage : Page
 
     private void Back_Click(object sender, RoutedEventArgs e) => Frame.Navigate(typeof(HomePage));
 
+    private void IniciarGuia_Click(object sender, RoutedEventArgs e) =>
+        App.MainAppWindow?.IniciarGuiaInicioRapido();
+
     private async void IdleSwitch_Toggled(object sender, RoutedEventArgs e)
     {
         if (!_ready)

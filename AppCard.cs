@@ -6,6 +6,13 @@ using Windows.UI;
 
 namespace Iderma_Launcher;
 
+public enum AppCardState
+{
+    Ready,
+    Missing,
+    UpdateRequired
+}
+
 public sealed class AppCard
 {
     public required string Id { get; init; }
@@ -19,23 +26,44 @@ public sealed class AppCard
     public bool CanLaunch { get; init; }
     public Visibility LockVisibility { get; init; }
     public double CardOpacity { get; init; } = 1;
+    public AppCardState State { get; init; } = AppCardState.Ready;
+    public bool RequiresDownload => State is AppCardState.Missing or AppCardState.UpdateRequired;
 
-    public static AppCard From(AppDefinition app)
+    public static AppCard From(AppDefinition app, AppCardState state = AppCardState.Ready)
     {
+        var locked = app.IsLocked;
+        var needsAction = !locked && state != AppCardState.Ready;
         var (background, foreground) = ColorsFor(app.Status);
+        var label = state switch
+        {
+            AppCardState.Missing => "Instalar",
+            AppCardState.UpdateRequired => "Actualizar",
+            _ => AppCatalog.StatusLabel(app.Status)
+        };
+        if (needsAction)
+        {
+            background = state == AppCardState.Missing
+                ? Color.FromArgb(64, 120, 120, 120)
+                : Color.FromArgb(64, 180, 83, 9);
+            foreground = state == AppCardState.Missing
+                ? Color.FromArgb(255, 200, 200, 200)
+                : Color.FromArgb(255, 224, 164, 96);
+        }
+
         return new AppCard
         {
             Id = app.Id,
             Name = app.Name,
             Description = app.Description,
-            LogoPath = AppCatalog.GetLogoUri(app.LogoFileName),
-            StatusLabel = AppCatalog.StatusLabel(app.Status),
+            LogoPath = AppCatalog.GetCardLogoUri(app.Id, deshabilitado: needsAction),
+            StatusLabel = label,
             Status = app.Status,
             StatusBackground = new SolidColorBrush(background),
             StatusForeground = new SolidColorBrush(foreground),
-            CanLaunch = !app.IsLocked,
-            LockVisibility = app.IsLocked ? Visibility.Visible : Visibility.Collapsed,
-            CardOpacity = app.IsLocked ? 0.55 : 1
+            CanLaunch = !locked,
+            LockVisibility = locked ? Visibility.Visible : Visibility.Collapsed,
+            CardOpacity = locked ? 0.55 : 1,
+            State = locked ? AppCardState.Ready : state
         };
     }
 

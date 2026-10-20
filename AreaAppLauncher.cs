@@ -44,6 +44,68 @@ internal static class AreaAppLauncher
     public static bool TryGetTarget(string appId, out AppTarget target) =>
         Targets.TryGetValue(appId, out target!);
 
+    public static string AppsInstallRoot =>
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Iderma",
+            "Apps");
+
+    public static string InstallFolder(string appId) =>
+        Path.Combine(AppsInstallRoot, appId.Trim().ToLowerInvariant());
+
+    /// <summary>Solo cuenta la instalación en %LOCALAPPDATA%\Iderma\Apps (no bin\Debug).</summary>
+    public static bool IsInstalled(string appId) => FindInstalledExe(appId) is not null;
+
+    public static string? FindExe(string appId) =>
+        Targets.TryGetValue(appId, out var target) ? FindDebugExe(target, appId) : null;
+
+    public static string? FindInstalledExe(string appId)
+    {
+        if (!Targets.TryGetValue(appId, out var target) || string.IsNullOrWhiteSpace(target.ExeFileName))
+        {
+            return null;
+        }
+
+        return BuscarExeEnCarpeta(InstallFolder(appId), target.ExeFileName);
+    }
+
+    public static Version? VersionInstalada(string appId)
+    {
+        // Solo la carpeta instalada: sin ella la app aparece como «Instalar».
+        var exe = FindInstalledExe(appId);
+        if (exe is null || !File.Exists(exe))
+        {
+            return null;
+        }
+
+        try
+        {
+            var info = FileVersionInfo.GetVersionInfo(exe);
+            if (Version.TryParse(info.FileVersion, out var version))
+            {
+                return new Version(
+                    version.Major,
+                    version.Minor,
+                    Math.Max(version.Build, 0),
+                    Math.Max(version.Revision, 0));
+            }
+
+            if (Version.TryParse(info.ProductVersion?.Split('+')[0], out version))
+            {
+                return new Version(
+                    version.Major,
+                    version.Minor,
+                    Math.Max(version.Build, 0),
+                    Math.Max(version.Revision, 0));
+            }
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or FileNotFoundException or ArgumentException)
+        {
+        }
+
+        return null;
+    }
+
     public static bool TryGetCommand(string appId, out AppLaunchCommand command)
     {
         command = default;
@@ -415,13 +477,23 @@ internal static class AreaAppLauncher
         }
 
         var name = Path.GetFileNameWithoutExtension(target.ExeFileName);
-        var expected = FindDebugExe(target);
+        var expected = FindDebugExe(target, appId: null);
         var folder = target.Folder.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
             + Path.DirectorySeparatorChar;
+        var installFolder = string.Empty;
+        foreach (var pair in Targets)
+        {
+            if (ReferenceEquals(pair.Value, target) || pair.Value.ExeFileName == target.ExeFileName
+                && string.Equals(pair.Value.Folder, target.Folder, StringComparison.OrdinalIgnoreCase))
+            {
+                installFolder = InstallFolder(pair.Key) + Path.DirectorySeparatorChar;
+                break;
+            }
+        }
 
         foreach (var process in Process.GetProcessesByName(name))
         {
-            if (Matches(process, expected, folder))
+            if (Matches(process, expected, folder, installFolder))
             {
                 found.Add(process);
             }
@@ -434,7 +506,7 @@ internal static class AreaAppLauncher
         return found;
     }
 
-    private static bool Matches(Process process, string? expected, string folder)
+    private static bool Matches(Process process, string? expected, string folder, string installFolder)
     {
         try
         {
@@ -456,7 +528,13 @@ internal static class AreaAppLauncher
                 return true;
             }
 
-            return full.StartsWith(folder, StringComparison.OrdinalIgnoreCase);
+            if (!string.IsNullOrEmpty(folder) && full.StartsWith(folder, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return !string.IsNullOrEmpty(installFolder)
+                   && full.StartsWith(installFolder, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception or NotSupportedException)
         {
@@ -487,11 +565,21 @@ internal static class AreaAppLauncher
         return null;
     }
 
-    private static string? FindDebugExe(AppTarget target)
+    private static string? FindDebugExe(AppTarget target, string? appId = null)
     {
         if (string.IsNullOrWhiteSpace(target.ExeFileName))
         {
             return null;
+        }
+
+        // Preferir la copia instalada (actualizaciones) antes que bin\Debug del monorepo.
+        if (!string.IsNullOrWhiteSpace(appId))
+        {
+            var instalada = BuscarExeEnCarpeta(InstallFolder(appId), target.ExeFileName);
+            if (instalada is not null)
+            {
+                return instalada;
+            }
         }
 
         var bin = Path.Combine(target.Folder, "bin");
@@ -520,6 +608,24 @@ internal static class AreaAppLauncher
 
         return Directory.EnumerateFiles(target.Folder, target.ExeFileName, SearchOption.AllDirectories)
             .Where(path => !path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(File.GetLastWriteTimeUtc)
+            .FirstOrDefault();
+    }
+
+    private static string? BuscarExeEnCarpeta(string carpeta, string exeFileName)
+    {
+        if (!Directory.Exists(carpeta))
+        {
+            return null;
+        }
+
+        var directo = Path.Combine(carpeta, exeFileName);
+        if (File.Exists(directo))
+        {
+            return directo;
+        }
+
+        return Directory.EnumerateFiles(carpeta, exeFileName, SearchOption.AllDirectories)
             .OrderByDescending(File.GetLastWriteTimeUtc)
             .FirstOrDefault();
     }

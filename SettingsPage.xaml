@@ -36,7 +36,7 @@
                         <TextBlock
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Style="{StaticResource BodyTextBlockStyle}"
-                            Text="Seguridad de tu sesión y comprobación del acceso a la base de datos." />
+                            Text="Guía de inicio, seguridad de tu sesión y comprobación del acceso a la base de datos." />
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -46,7 +46,40 @@
                 IsClosable="True"
                 IsOpen="False" />
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaGuia"
+                Style="{StaticResource FluentCardStyle}">
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <FontIcon
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Glyph="&#xE897;" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="Guía de inicio rápido" />
+                    </StackPanel>
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        Text="Recorrido con globos de ayuda sobre el inicio y cada bloque de esta pantalla. Puedes salir en cualquier momento y repetirlo cuando quieras."
+                        TextWrapping="WrapWholeWords" />
+                    <Button
+                        HorizontalAlignment="Left"
+                        Click="IniciarGuia_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="16" Glyph="&#xE768;" />
+                            <TextBlock VerticalAlignment="Center" Text="Iniciar guía" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <Border
+                x:Name="TarjetaCuenta"
+                Style="{StaticResource FluentCardStyle}">
                 <Grid ColumnSpacing="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -129,7 +162,9 @@
                 </Grid>
             </Border>
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaTroubleshooting"
+                Style="{StaticResource FluentCardStyle}">
                 <StackPanel Spacing="8">
                     <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Troubleshooting" />
                     <TextBlock
@@ -193,7 +228,9 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaFlujo"
+                Style="{StaticResource FluentCardStyle}">
                 <StackPanel Spacing="8">
                     <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Flujo de trabajo" />
                     <TextBlock
@@ -210,7 +247,9 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaProteccion"
+                Style="{StaticResource FluentCardStyle}">
                 <StackPanel Spacing="12">
                     <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Protección de la sesión" />
                     <TextBlock
@@ -270,7 +309,9 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaRegistro"
+                Style="{StaticResource FluentCardStyle}">
                 <StackPanel Spacing="8">
                     <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Registro de seguridad" />
                     <TextBlock
@@ -309,7 +350,9 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource FluentCardStyle}">
+            <Border
+                x:Name="TarjetaInicios"
+                Style="{StaticResource FluentCardStyle}">
                 <StackPanel Spacing="8">
                     <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Registro de inicios de sesión" />
                     <TextBlock

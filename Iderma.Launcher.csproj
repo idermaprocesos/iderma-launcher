@@ -17,10 +17,10 @@
     <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>15.0.5</Version>
-    <AssemblyVersion>15.0.5.0</AssemblyVersion>
-    <FileVersion>15.0.5.0</FileVersion>
-    <InformationalVersion>15.0.5</InformationalVersion>
+    <Version>15.0.9</Version>
+    <AssemblyVersion>15.0.9.0</AssemblyVersion>
+    <FileVersion>15.0.9.0</FileVersion>
+    <InformationalVersion>15.0.9</InformationalVersion>
     <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -58,6 +58,16 @@
     <Content Include="Assets\Apps\*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Logos\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\LogosDisabled\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\meetings\**\*.*">
+      <Link>Assets\Meetings\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\img\**\*.*">
       <Link>img\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -91,7 +101,7 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.6.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Iderma.Core\Iderma.Core.csproj" />
+    <ProjectReference Include="..\Iderma.Core\Iderma.Core.csproj" />
   </ItemGroup>
 
   <!--
@@ -110,4 +120,16 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
   </PropertyGroup>
+
+  <!--
+    Con RID + WindowsAppSDKSelfContained a veces se copian hostfxr/hostpolicy
+    junto al exe. El apphost entonces busca .NET en esa carpeta (vacía) y muestra
+    "You must install or update .NET" aunque el runtime global sí esté instalado.
+  -->
+  <Target Name="UsarDotNetGlobal"
+          AfterTargets="Build"
+          Condition="'$(SelfContained)' != 'true' and '$(DesignTimeBuild)' != 'true'">
+    <Delete Files="$(TargetDir)hostfxr.dll;$(TargetDir)hostpolicy.dll"
+            TreatErrorsAsWarnings="true" />
+  </Target>
 </Project>

@@ -13,7 +13,7 @@
         <DataTemplate x:Key="GridAppTemplate" x:DataType="local:AppCard">
             <Button
                 Width="240"
-                MinHeight="252"
+                MinHeight="196"
                 Padding="0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -28,15 +28,15 @@
                 Tag="{x:Bind Id}">
                 <Border
                     Width="240"
-                    MinHeight="252"
+                    MinHeight="196"
                     Opacity="{x:Bind CardOpacity}"
                     Style="{StaticResource FluentCardStyle}">
-                    <Grid RowSpacing="8">
+                    <Grid RowSpacing="6">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <Grid>
@@ -85,9 +85,11 @@
 
                         <TextBlock
                             Grid.Row="3"
+                            MaxLines="2"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Style="{StaticResource CaptionTextBlockStyle}"
                             Text="{x:Bind Description}"
+                            TextTrimming="CharacterEllipsis"
                             TextWrapping="WrapWholeWords" />
                     </Grid>
                 </Border>
@@ -232,6 +234,57 @@
                 </Border>
             </Button>
         </DataTemplate>
+
+        <DataTemplate x:Key="CompactMeetingTemplate" x:DataType="local:MeetingCard">
+            <Border
+                Width="300"
+                MinHeight="76"
+                Padding="12"
+                Opacity="{x:Bind CardOpacity}"
+                RightTapped="MeetingCard_RightTapped"
+                Style="{StaticResource FluentCardStyle}"
+                Tag="{x:Bind Id}"
+                Tapped="MeetingCard_Tapped"
+                ToolTipService.ToolTip="Clic: ver detalle · Clic derecho: sí / no participo">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border
+                        Width="44"
+                        Height="44"
+                        VerticalAlignment="Center"
+                        CornerRadius="{ThemeResource ControlCornerRadius}">
+                        <Image Source="{x:Bind LogoPath}" Stretch="Uniform" />
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                        <TextBlock
+                            MaxLines="1"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="{x:Bind Title}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind WhenLabel}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind DurationLabel}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind LocationLabel}"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Padding="40,16,40,24" RowSpacing="12">
@@ -348,6 +401,15 @@
                         </AppBarButton.Icon>
                     </AppBarButton>
                     <AppBarButton
+                        x:Name="DownloadAllButton"
+                        Click="DownloadAllButton_Click"
+                        Label="Descargar todo"
+                        ToolTipService.ToolTip="Descarga e instala todas las aplicaciones de su cuenta">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE896;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
                         x:Name="UpdatesButton"
                         Click="UpdatesButton_Click"
                         Label="Actualizaciones">
@@ -355,7 +417,10 @@
                             <FontIcon Glyph="&#xE895;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Click="LogoutButton_Click" Label="Cerrar sesión">
+                    <AppBarButton
+                        x:Name="LogoutButton"
+                        Click="LogoutButton_Click"
+                        Label="Cerrar sesión">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xF3B1;" />
                         </AppBarButton.Icon>
@@ -377,29 +442,136 @@
                 Visibility="Collapsed" />
         </StackPanel>
 
-        <GridView
-            x:Name="AppsGrid"
+        <ScrollViewer
+            x:Name="OuterScroll"
             Grid.Row="2"
-            IsItemClickEnabled="False"
-            ItemContainerStyle="{StaticResource ChromeLessGridViewItemStyle}"
-            ItemTemplate="{StaticResource GridAppTemplate}"
-            SelectionMode="None">
-            <GridView.ItemContainerTransitions>
-                <TransitionCollection />
-            </GridView.ItemContainerTransitions>
-        </GridView>
-        <ListView
-            x:Name="AppsList"
-            Grid.Row="2"
-            IsItemClickEnabled="False"
-            ItemContainerStyle="{StaticResource ChromeLessListViewItemStyle}"
-            ItemTemplate="{StaticResource ListAppTemplate}"
-            SelectionMode="None"
-            Visibility="Collapsed">
-            <ListView.ItemContainerTransitions>
-                <TransitionCollection />
-            </ListView.ItemContainerTransitions>
-        </ListView>
+            HorizontalScrollBarVisibility="Disabled"
+            SizeChanged="OuterScroll_SizeChanged"
+            VerticalScrollBarVisibility="Auto">
+            <Grid
+                x:Name="ContentLayout"
+                ColumnSpacing="20"
+                RowSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="SideDividerCol" Width="0" />
+                    <ColumnDefinition x:Name="SideMeetingsCol" Width="0" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition x:Name="StackedMeetingsRow" Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ScrollViewer
+                    x:Name="AppsScroll"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Spacing="0">
+                        <GridView
+                            x:Name="AppsGrid"
+                            IsItemClickEnabled="False"
+                            ItemContainerStyle="{StaticResource ChromeLessGridViewItemStyle}"
+                            ItemTemplate="{StaticResource GridAppTemplate}"
+                            SelectionMode="None">
+                            <GridView.ItemContainerTransitions>
+                                <TransitionCollection />
+                            </GridView.ItemContainerTransitions>
+                        </GridView>
+                        <ListView
+                            x:Name="AppsList"
+                            IsItemClickEnabled="False"
+                            ItemContainerStyle="{StaticResource ChromeLessListViewItemStyle}"
+                            ItemTemplate="{StaticResource ListAppTemplate}"
+                            SelectionMode="None"
+                            Visibility="Collapsed">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection />
+                            </ListView.ItemContainerTransitions>
+                        </ListView>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Rectangle
+                    x:Name="SideDivider"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="1"
+                    VerticalAlignment="Stretch"
+                    Fill="{ThemeResource DividerStrokeColorDefaultBrush}"
+                    Visibility="Collapsed" />
+
+                <Border
+                    x:Name="MeetingsHost"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Padding="0,4,0,0">
+                    <ScrollViewer
+                        x:Name="MeetingsScroll"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Disabled">
+                        <StackPanel Spacing="12">
+                            <Rectangle
+                                x:Name="StackedDivider"
+                                Height="1"
+                                Margin="0,0,0,4"
+                                Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center" Spacing="2">
+                                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Reuniones" />
+                                    <TextBlock
+                                        x:Name="MeetingsSubtitle"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="Próximas reuniones del equipo" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8">
+                                    <Button Click="ScheduleMeeting_Click">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon FontSize="14" Glyph="&#xE710;" />
+                                            <TextBlock Text="Programar" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Click="MeetingHistory_Click">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon FontSize="14" Glyph="&#xE81C;" />
+                                            <TextBlock Text="Historial" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock
+                                x:Name="NoMeetingsText"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="No hay reuniones próximas. Programa una con el equipo."
+                                Visibility="Collapsed" />
+
+                            <GridView
+                                x:Name="MeetingsGrid"
+                                IsItemClickEnabled="False"
+                                ItemContainerStyle="{StaticResource ChromeLessGridViewItemStyle}"
+                                ItemTemplate="{StaticResource CompactMeetingTemplate}"
+                                SelectionMode="None">
+                                <GridView.ItemContainerTransitions>
+                                    <TransitionCollection />
+                                </GridView.ItemContainerTransitions>
+                            </GridView>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </ScrollViewer>
 
         <Border
             Grid.Row="3"

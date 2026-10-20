@@ -30,5 +30,29 @@
             x:Name="RootFrame"
             Grid.Row="1"
             Background="Transparent" />
+
+        <Border
+            x:Name="AnclaGuia"
+            Grid.Row="1"
+            Width="24"
+            Height="24"
+            Margin="40,24,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            IsHitTestVisible="False" />
+
+        <TeachingTip
+            x:Name="TipGuia"
+            Title="Guía de inicio rápido"
+            Grid.RowSpan="2"
+            ActionButtonClick="TipGuia_ActionButtonClick"
+            CloseButtonClick="TipGuia_CloseButtonClick"
+            IsLightDismissEnabled="False"
+            PreferredPlacement="Bottom">
+            <TeachingTip.IconSource>
+                <FontIconSource Glyph="&#xE897;" />
+            </TeachingTip.IconSource>
+        </TeachingTip>
     </Grid>
 </Window>
